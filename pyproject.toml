@@ -1,0 +1,17 @@
+[project]
+name = "to-do-list"
+version = "0.1.0"
+description = "todolist CLI app"
+authors = [
+    {name = "Raha Kariminia"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
