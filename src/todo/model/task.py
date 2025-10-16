@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List
 from datetime import datetime
-from ..utils.utils import  MAX_TASK_TITLE_WORDS, MAX_TASK_DESCRIPTION_WORDS, TASK_STATUS
+from ..utils.validators import  validate_name_of_task, validate_description_of_task, validate_status_of_task
 
+@dataclass
 class Task:
     name: int
     description: str = ""
@@ -10,8 +11,6 @@ class Task:
     deadline : datetime = field(default_factory = datetime.now)
 
     def __post_init__(self):
-        """Validate initial data after initialization."""
-        if len(self.name.split()) <= MAX_TASK_NAME_WORD:
-            raise ValueError("Project name exceeds 30 words")
-        if len(self.description.split()) <= MAX_TASK_DESCRIPTION_WORD:
-            raise ValueError("Project description exceeds 150 words")
+        validate_name_of_task(self.name)
+        validate_description_of_task(self.description)
+        self.status = validate_status_of_task(self.status)
