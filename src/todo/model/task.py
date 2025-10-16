@@ -2,8 +2,6 @@ from dataclasses import dataclass, field
 from typing import List
 from datetime import datetime
 
-TASK_STATUS = {"todo" , "doing" , "done"}
-
 class Task:
     name: int
     description: str = ""
