@@ -26,3 +26,6 @@ class In_Memory_Storage:
             }
             return True
         return False
+    
+    def list_projects(self) -> list[Project]:
+        return list(self._projects.values())
