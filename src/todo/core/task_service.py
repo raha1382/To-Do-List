@@ -17,3 +17,6 @@ class TaskService:
         task = Task(id=0, title=name, description=description, status=status, deadline=deadline)
         self.storage.save_task(task)
         return task
+    
+    def get_task(self, name: str) -> Task | None:
+        return self.storage.get_task(name)
