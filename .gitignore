@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Environment
+.env
+.env.example
+
+# Poetry
+poetry.lock
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Tests
+htmlcov/
+.coverage
+pytest_cache/

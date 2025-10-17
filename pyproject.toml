@@ -1,0 +1,52 @@
+[project]
+name = "to-do-list"
+version = "0.1.0"
+description = "todolist CLI app"
+authors = [
+    {name = "Raha Kariminia"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "click (>=8.3.0,<9.0.0)",
+    "python-dotenv (>=1.1.1,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "pytest (>=8.4.2,<9.0.0)",
+    "black (>=25.9.0,<26.0.0)",
+    "ruff (>=0.14.0,<0.15.0)",
+    "mypy (>=1.18.2,<2.0.0)",
+    "pre-commit (>=4.3.0,<5.0.0)"
+]
+
+[tool.poetry]
+packages = [{ include = "todo", from = "src" }]
+
+[tool.poetry.scripts]
+todo = "todo.cli.main:cli"
+
+[tool.black]
+line-length = 88
+target-version = ['py313']
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.13"
+disallow_untyped_defs = true
+check_untyped_defs = true
+strict_optional = true
+ignore_missing_imports = true
+
