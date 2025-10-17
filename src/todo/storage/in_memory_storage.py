@@ -45,3 +45,7 @@ class In_Memory_Storage:
             del self._tasks[task_id]
             return True
         return False
+    
+    def list_tasks(self) -> List[Task]:
+        """Return all tasks."""
+        return list(self._tasks.values())
