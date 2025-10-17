@@ -42,3 +42,6 @@ class Project_Service:
             self.storage.save_project(project)
             return True
         return False
+    
+    def list_projects(self) -> list[Project]:
+        return self.storage.list_projects()
