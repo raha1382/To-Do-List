@@ -7,7 +7,7 @@ class Project_Service:
     def __init__(self, storage: In_Memory_Storage):
         self.storage = storage
 
-    def Create_Project(self, name: str, description: str):
+    def Create_Project(self, name: str, description: str) -> Project:
         if len(self.storage.list_of_projects) > MAX_NUMBER_OF_PROJECTS:
             raise ValueError(f"Maximum number of projects ({MAX_NUMBER_OF_PROJECTS}) reached")
         
