@@ -29,3 +29,10 @@ class In_Memory_Storage:
     
     def list_projects(self) -> list[Project]:
         return list(self._projects.values())
+    
+    def save_task(self, task: Task) -> int:
+        if not task.id:
+            task.id = self._next_task_id
+            self._next_task_id += 1
+        self._tasks[task.id] = task
+        return task.id
