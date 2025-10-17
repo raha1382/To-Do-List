@@ -40,7 +40,7 @@ def validate_deadline(deadline: datetime | str | None) -> datetime | None:
     if deadline is None:
         return None
     if isinstance(deadline, str):
-        try:
+        try: 
             deadline_datetime = datetime.strptime(deadline, "%Y-%m-%d")
         except ValueError:
             raise ValueError("Deadline must be in 'YYYY-MM-DD' format or a valid datetime object.")
