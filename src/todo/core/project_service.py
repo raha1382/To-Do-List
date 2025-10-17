@@ -28,3 +28,6 @@ class Project_Service:
             self.storage.save_project(project)
             return True
         return False
+    
+    def delete_project(self, project_id: int) -> bool:
+        return self.storage.delete_project(project_id)
