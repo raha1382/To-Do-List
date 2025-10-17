@@ -1,0 +1,13 @@
+from ..model.task import Task, TaskStatus
+from ..storage.in_memory_storage import InMemoryStorage
+from ..utils.utils import MAX_NUMBER_OF_TASKS
+
+class TaskService:
+    
+    def __init__(self, storage: InMemoryStorage):
+        self.storage = storage
+
+    def create_task(self, name: str, description: str = "", status: str = TaskStatus.TODO.value, deadline: str | None = None) -> Task:
+        """Create a new task with validation."""
+        if len(self.storage.list_tasks()) >= MAX_NUMBER_OF_TASKS:
+            raise ValueError(f"Maximum number of tasks ({MAX_NUMBER_OF_TASKS}) reached")
