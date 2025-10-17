@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 from datetime import datetime
-from ..utils.validators import validate_name_of_task, validate_description_of_task, validate_status_of_task
+from ..utils.validators import validate_name_of_task, validate_description_of_task, validate_status_of_task, validate_deadline
 
 @dataclass
 class Task:
@@ -16,3 +16,5 @@ class Task:
         self.title = validate_name_of_task(self.title)
         validate_description_of_task(self.description)
         self.status = validate_status_of_task(self.status)
+        if self.deadline is not None:
+            validate_deadline(self.deadline)

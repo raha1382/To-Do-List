@@ -31,7 +31,7 @@ dev = [
 packages = [{ include = "todo", from = "src" }]
 
 [tool.poetry.scripts]
-todo = "todo.cli.main:cli"
+todo = "todo.cli.main:main"
 
 [tool.black]
 line-length = 88

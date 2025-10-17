@@ -14,24 +14,35 @@ class ProjectService:
         if name in self.storage._projects:
             raise ValueError(f"Project with name '{name}' already exists. Please enter a different name.")
         
-        project = Project(name, description)
+        project_id = max((p.id for p in self.storage._projects.values()), default=-1) + 1
+        project = Project(id=project_id, name=name, description=description)
         self.storage.add_project(project)
         return project
     
     def get_project(self, name: str) -> Project | None:
         return self.storage.get_project(name)
 
-    def update_project(self, name: str, new_name: str, description: str) -> bool:
-        project = self.storage.get_project(name)
-        if project:
-            project.name = new_name
-            project.description = description
-            self.storage.add_project(project)
-            if name != new_name:
-                if name in self.storage._projects:
-                    del self.storage._projects[name]
-            return True
-        return False
+    def update_project(self, name: str, new_name: str, new_description: str) -> bool:
+        # Check if the original project exists
+        if name not in self.storage._projects:
+            return False
+
+        # Check if the new name already exists
+        if new_name and new_name != name and new_name in self.storage._projects:
+            raise ValueError(f"Project '{new_name}' already exists.")
+
+        # Get the project
+        project = self.storage._projects[name]
+        # Update attributes
+        project.name = new_name or name  
+        project.description = new_description or project.description  
+
+        # Remove old reference and add with new name if changed
+        if name != new_name:
+            del self.storage._projects[name]
+            self.storage._projects[new_name] = project
+
+        return True
     
     def delete_project(self, name: str) -> bool:
         return self.storage.delete_project(name)

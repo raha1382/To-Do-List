@@ -6,6 +6,7 @@ from ..utils.validators import validate_name_of_project, validate_description_of
 
 @dataclass
 class Project:
+    id: int
     name: str
     description: str = ""
     tasks: list[Task] = field(default_factory=list)
