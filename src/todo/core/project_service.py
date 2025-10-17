@@ -31,3 +31,14 @@ class Project_Service:
     
     def delete_project(self, project_id: int) -> bool:
         return self.storage.delete_project(project_id)
+    
+    def add_task_to_project(self, project_id: int, task_title: str, description: str = "") -> bool:
+        project = self.storage.get_project(project_id)
+        if project:
+            from ..services.task_service import TaskService
+            task_service = TaskService(self.storage)
+            task = task_service.create_task(task_title, description)
+            project.add_task(task)
+            self.storage.save_project(project)
+            return True
+        return False
