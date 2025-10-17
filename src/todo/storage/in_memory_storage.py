@@ -39,3 +39,9 @@ class In_Memory_Storage:
     
     def get_task(self, task_id: int) -> Task | None:
         return self._tasks.get(task_id)
+    
+    def delete_task(self, task_id: int) -> bool:
+        if task_id in self._tasks:
+            del self._tasks[task_id]
+            return True
+        return False
