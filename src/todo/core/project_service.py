@@ -17,4 +17,7 @@ class Project_Service:
         project = Project(name, description)
         self.storage.add_project(project)
         return project
+    
+    def get_project(self, project_id: int) -> Project | None:
+        return self.storage.get_project(project_id)
 
