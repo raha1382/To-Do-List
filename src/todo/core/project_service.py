@@ -15,9 +15,7 @@ class ProjectService:
         if name in self.storage._projects:
             raise ValueError(f"Project with name '{name}' already exists. Please enter a different name.")
         
-        validate_name_of_project(name)
-        validate_description_of_project(description)
-        
+
         project_id = max((project_item.id for project_item in self.storage._projects.values()), default=-1) + 1
         project = Project(id=project_id, name=name, description=description)
         self.storage.add_project(project)
