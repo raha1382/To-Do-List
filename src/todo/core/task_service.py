@@ -33,3 +33,6 @@ class TaskService:
                 del self.storage._tasks[name]
             return True
         return False
+    
+    def delete_task(self, name: str) -> bool:
+        return self.storage.delete_task(name)
