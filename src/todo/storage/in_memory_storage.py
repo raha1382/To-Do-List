@@ -9,4 +9,7 @@ class In_Memory_Storage:
 
     def add_project(self, project: Project):
         self._projects[project.name] = project
-        
+
+    def get_project(self, name: str):
+            project = self._projects[name]
+            return project
