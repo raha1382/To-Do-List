@@ -132,7 +132,7 @@ def main():
                     if tasks:
                         print(f"Tasks in project '{args.project_name}':")
                         for task in tasks:
-                            print(f"- {task.title}: {task.description} (Status: {task.status}) (id: {task.id})")
+                            print(f"- {task.title}: {task.description} (Status: {task.status}) (id: {task.id}) (deadline: {task.deadline})")
                     else:
                         print(f"No tasks found in project '{args.project_name}'.")
                 except ValueError as e:
