@@ -21,3 +21,10 @@ class Project_Service:
     def get_project(self, project_id: int) -> Project | None:
         return self.storage.get_project(project_id)
 
+    def update_project(self, project_id: int, name: str, description: str) -> bool:
+        project = self.storage.get_project(project_id)
+        if project:
+            project.update(name, description)
+            self.storage.save_project(project)
+            return True
+        return False
