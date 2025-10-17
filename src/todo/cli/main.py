@@ -1,12 +1,12 @@
 import argparse
-from todo.core.project_service import Project_Service
-from todo.core.task_service import Task_Service
-from todo.storage.in_memory_storage import In_Memory_Storage
+from todo.core.project_service import ProjectService
+from todo.core.task_service import TaskService
+from todo.storage.in_memory_storage import InMemoryStorage
 
 def main():
-    storage = In_Memory_Storage()
-    project_service = Project_Service(storage)
-    task_service = Task_Service(storage)
+    storage = InMemoryStorage()
+    project_service = ProjectService(storage)
+    task_service = TaskService(storage)
 
     parser = argparse.ArgumentParser(description="ToDo List CLI Application")
     subparsers = parser.add_subparsers(dest="command")
@@ -39,7 +39,7 @@ def main():
             print(f"Error: {e}")
     elif args.command == "add-task":
         try:
-            success = project_service.add_task_to_project(args.project_name, args.task_name, args.description or "")
+            success = task_service.create_task(args.task_name, args.description or "", project_name=args.project_name)
             if success:
                 print(f"Task '{args.task_name}' added to project '{args.project_name}'.")
             else:

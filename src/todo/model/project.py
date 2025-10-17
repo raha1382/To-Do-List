@@ -6,10 +6,10 @@ from ..utils.validators import validate_name_of_project, validate_description_of
 
 @dataclass
 class Project:
-    name: int
+    name: str
     description: str = ""
-    tasks: list[Task] = field(default_factory = list)
-    created_time: datetime = field(default_factory = datetime.now)
+    tasks: list[Task] = field(default_factory=list)
+    created_time: datetime = field(default_factory=datetime.now)
 
     def __post_init__(self):
         validate_name_of_project(self.name)

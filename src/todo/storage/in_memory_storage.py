@@ -2,17 +2,17 @@ from ..model.project import Project
 from ..model.task import Task
 from typing import Dict, List
 
-class In_Memory_Storage:
+class InMemoryStorage:
     def __init__(self):
         self._projects: dict[str, Project] = {}
-        self._tasks: dict[str, Task] = {}
+        self._tasks: dict[int, Task] = {}
+        self._next_task_id = 0
 
-    def add_project(self, project: Project) -> int:
+    def add_project(self, project: Project) -> None:
         self._projects[project.name] = project
 
     def get_project(self, name: str) -> Project | None:
-            project = self._projects[name]
-            return project
+        return self._projects.get(name)
 
     def delete_project(self, name: str) -> bool:
         if not name or not isinstance(name, str):
@@ -31,7 +31,7 @@ class In_Memory_Storage:
         return list(self._projects.values())
     
     def add_task(self, task: Task) -> int:
-        if not task.id:
+        if task.id is None or task.id == 0:
             task.id = self._next_task_id
             self._next_task_id += 1
         self._tasks[task.id] = task

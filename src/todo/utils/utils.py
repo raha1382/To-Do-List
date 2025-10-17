@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-from typing import Set
 
 # Load environment variables from .env file in the current directory
 load_dotenv()  # Looks for .env in src/todo/
@@ -15,4 +14,4 @@ MAX_TASK_DESCRIPTION_WORDS = int(os.getenv("MAX_TASK_DESCRIPTION_WORDS", 150))
 
 # Load and parse TASK_STATUS
 task_status_str = os.getenv("TASK_STATUS", "todo,doing,done")
-TASK_STATUS: Set[str] = set(task_status_str.split(','))
+TASK_STATUS = task_status_str.split(',')
