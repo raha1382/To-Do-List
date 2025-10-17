@@ -11,3 +11,9 @@ class TaskService:
         """Create a new task with validation."""
         if len(self.storage.list_tasks()) >= MAX_NUMBER_OF_TASKS:
             raise ValueError(f"Maximum number of tasks ({MAX_NUMBER_OF_TASKS}) reached")
+        if name in self.storage._tasks:
+            raise ValueError(f"Task with name '{name}' already exists")
+        
+        task = Task(id=0, title=name, description=description, status=status, deadline=deadline)
+        self.storage.save_task(task)
+        return task
