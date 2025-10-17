@@ -7,25 +7,27 @@ from ..utils.utils import (
 )
 from datetime import datetime
 
-def validate_name_of_project(name: str) -> str:
-    if len(name.split()) > MAX_PROJECT_NAME_WORDS:
-        raise ValueError(f"Project name exceeds {MAX_PROJECT_NAME_WORDS} words")
-    return name
+def validate_name_of_project(name: str) -> None:
+    if not name or len(name.strip()) == 0:
+        raise ValueError("Project name cannot be empty.")
+    if len(name) > MAX_PROJECT_NAME_WORDS:
+        raise ValueError(f"Project name cannot exceed {MAX_PROJECT_NAME_WORDS} characters (current length: {len(name)}).")
+    if not all(c.isalnum() or c.isspace() or c == '-' for c in name):
+        raise ValueError("Project name can only contain letters, numbers, spaces, and hyphens.")
 
-def validate_description_of_project(description: str) -> str:
-    if len(description.split()) > MAX_PROJECT_DESCRIPTION_WORDS:
-        raise ValueError(f"Project description exceeds {MAX_PROJECT_DESCRIPTION_WORDS} words")
-    return description
+def validate_description_of_project(description: str) -> None:
+    if len(description) > MAX_PROJECT_DESCRIPTION_WORDS:
+        raise ValueError(f"Project description cannot exceed {MAX_PROJECT_DESCRIPTION_WORDS} characters (current length: {len(description)}).")
 
-def validate_name_of_task(name: str) -> str:
-    if len(name.split()) > MAX_TASK_TITLE_WORDS:
-        raise ValueError(f"Task title exceeds {MAX_TASK_TITLE_WORDS} words")
-    return name
+def validate_name_of_task(title: str) -> None:
+    if not title or len(title.strip()) == 0:
+        raise ValueError("Task title cannot be empty.")
+    if len(title) > MAX_TASK_TITLE_WORDS:
+        raise ValueError(f"Task title cannot exceed {MAX_TASK_TITLE_WORDS} characters (current length: {len(title)}).")
 
-def validate_description_of_task(description: str) -> str:
-    if len(description.split()) > MAX_TASK_DESCRIPTION_WORDS:
-        raise ValueError(f"Task description exceeds {MAX_TASK_DESCRIPTION_WORDS} words")
-    return description
+def validate_description_of_task(description: str) -> None:
+    if len(description) > MAX_TASK_DESCRIPTION_WORDS:
+        raise ValueError(f"Task description cannot exceed {MAX_TASK_DESCRIPTION_WORDS} characters (current length: {len(description)}).")
 
 def validate_status_of_task(status: str) -> str:
     lower_case_status = status.lower()

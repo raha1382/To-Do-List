@@ -15,6 +15,9 @@ class TaskService:
         # Check for duplicate task title
         if any(task.title == name for task in self.storage._tasks.values()):
             raise ValueError(f"Task with name '{name}' already exists")
+        
+        self.title = validate_name_of_task(name)
+        validate_description_of_task(description)
 
         # Validate status
         status = validate_status_of_task(status)
