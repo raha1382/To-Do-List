@@ -13,3 +13,16 @@ class In_Memory_Storage:
     def get_project(self, name: str):
             project = self._projects[name]
             return project
+
+    def delete_project(self, name: str) -> bool:
+        if not name or not isinstance(name, str):
+            raise ValueError("Project name must be a non-empty string.")
+        if name in self._projects:
+            del self._projects[name]
+            self._tasks = {
+                task_key: task 
+                for task_key, task in self._tasks.items() 
+                if getattr(task, 'project_name', '') != name
+            }
+            return True
+        return False
