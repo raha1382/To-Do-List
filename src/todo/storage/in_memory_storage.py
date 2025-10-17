@@ -36,3 +36,6 @@ class In_Memory_Storage:
             self._next_task_id += 1
         self._tasks[task.id] = task
         return task.id
+    
+    def get_task(self, task_id: int) -> Task | None:
+        return self._tasks.get(task_id)
