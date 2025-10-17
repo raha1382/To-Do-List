@@ -2,6 +2,7 @@ from ..storage.in_memory_storage import InMemoryStorage
 from ..utils.utils import MAX_NUMBER_OF_PROJECTS
 from ..model.project import Project
 from ..core.task_service import TaskService
+from ..utils.validators import validate_name_of_project, validate_description_of_project
 
 class ProjectService:
     def __init__(self, storage: InMemoryStorage):
@@ -13,6 +14,9 @@ class ProjectService:
         
         if name in self.storage._projects:
             raise ValueError(f"Project with name '{name}' already exists. Please enter a different name.")
+        
+        validate_name_of_project(name)
+        validate_description_of_project(description)
         
         project_id = max((project_item.id for project_item in self.storage._projects.values()), default=-1) + 1
         project = Project(id=project_id, name=name, description=description)
