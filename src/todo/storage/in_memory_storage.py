@@ -1,16 +1,16 @@
 from ..model.project import Project
 from ..model.task import Task
-from ..utils.utils import MAX_NUMBER_OF_PROJECTS, MAX_NUMBER_OF_TASKS
+from typing import Dict, List
 
 class In_Memory_Storage:
     def __init__(self):
         self._projects: dict[str, Project] = {}
         self._tasks: dict[str, Task] = {}
 
-    def add_project(self, project: Project):
+    def add_project(self, project: Project) -> int:
         self._projects[project.name] = project
 
-    def get_project(self, name: str):
+    def get_project(self, name: str) -> Project | None:
             project = self._projects[name]
             return project
 
@@ -30,7 +30,7 @@ class In_Memory_Storage:
     def list_projects(self) -> list[Project]:
         return list(self._projects.values())
     
-    def save_task(self, task: Task) -> int:
+    def add_task(self, task: Task) -> int:
         if not task.id:
             task.id = self._next_task_id
             self._next_task_id += 1
@@ -47,5 +47,4 @@ class In_Memory_Storage:
         return False
     
     def list_tasks(self) -> List[Task]:
-        """Return all tasks."""
         return list(self._tasks.values())
