@@ -1,12 +1,12 @@
 import argparse
 from todo.core.project_service import Project_Service
-from todo.core.task_service import TaskService
+from todo.core.task_service import Task_Service
 from todo.storage.in_memory_storage import In_Memory_Storage
 
 def main():
     storage = In_Memory_Storage()
     project_service = Project_Service(storage)
-    task_service = TaskService(storage)
+    task_service = Task_Service(storage)
 
     parser = argparse.ArgumentParser(description="ToDo List CLI Application")
     subparsers = parser.add_subparsers(dest="command")

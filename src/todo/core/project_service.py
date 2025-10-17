@@ -1,6 +1,7 @@
 from ..storage.in_memory_storage import In_Memory_Storage
 from ..utils.utils import MAX_NUMBER_OF_PROJECTS
 from ..model.project import Project
+from ..core.task_service import Task_Service
 
 
 class Project_Service:
@@ -18,28 +19,30 @@ class Project_Service:
         self.storage.add_project(project)
         return project
     
-    def get_project(self, project_id: int) -> Project | None:
-        return self.storage.get_project(project_id)
+    def get_project(self, name: str) -> Project | None:
+        return self.storage.get_project(name)
 
-    def update_project(self, project_id: int, name: str, description: str) -> bool:
-        project = self.storage.get_project(project_id)
+    def update_project(self, name: str, new_name: str, description: str) -> bool:
+        project = self.storage.get_project(name)
         if project:
-            project.update(name, description)
-            self.storage.save_project(project)
+            project.name = new_name
+            project.description = description
+            self.storage.add_project(project)
+            if name != new_name:
+                del self.storage._projects[name]
             return True
         return False
     
-    def delete_project(self, project_id: int) -> bool:
-        return self.storage.delete_project(project_id)
+    def delete_project(self, name: str) -> bool:
+        return self.storage.delete_project(name)
     
-    def add_task_to_project(self, project_id: int, task_title: str, description: str = "") -> bool:
-        project = self.storage.get_project(project_id)
+    def add_task_to_project(self, project_name: str, task_name: str, description: str = "") -> bool:
+        project = self.storage.get_project(project_name)
         if project:
-            from ..services.task_service import TaskService
-            task_service = TaskService(self.storage)
-            task = task_service.create_task(task_title, description)
-            project.add_task(task)
-            self.storage.save_project(project)
+            task_service = Task_Service(self.storage)
+            task = task_service.create_task(task_name, description)
+            project.tasks.append(task)
+            self.storage.add_project(project)
             return True
         return False
     
