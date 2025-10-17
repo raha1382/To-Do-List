@@ -20,3 +20,16 @@ class TaskService:
     
     def get_task(self, name: str) -> Task | None:
         return self.storage.get_task(name)
+    
+    def update_task(self, name: str, new_name: str, description: str, status: str, deadline: str | None) -> bool:
+        task = self.storage.get_task(name)
+        if task:
+            task.title = new_name
+            task.description = description
+            task.status = status
+            task.deadline = deadline
+            self.storage.save_task(task)
+            if name != new_name:
+                del self.storage._tasks[name]
+            return True
+        return False
