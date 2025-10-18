@@ -34,20 +34,30 @@ def validate_status_of_task(status: str) -> str:
     return lower_case_status
 
 def validate_deadline(deadline: datetime | str | None) -> datetime | None:
-    """Validate the deadline format and ensure it is after the current time."""
+    """Validate the deadline format and ensure it is after the current time (date + time)."""
     if deadline is None:
         return None
+
     if isinstance(deadline, str):
-        try: 
-            deadline_datetime = datetime.strptime(deadline, "%Y-%m-%d")
-        except ValueError:
-            raise ValueError("Deadline must be in 'YYYY-MM-DD' format or a valid datetime object.")
+        for fmt in ("%Y-%m-%d %H:%M", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
+            try:
+                deadline_datetime = datetime.strptime(deadline, fmt)
+                break
+            except ValueError:
+                deadline_datetime = None
+        if not deadline_datetime:
+            raise ValueError(
+                "Deadline must be in one of the following formats: "
+                "'YYYY-MM-DD', 'YYYY-MM-DD HH:MM', or 'YYYY-MM-DD HH:MM:SS'."
+            )
+
     elif isinstance(deadline, datetime):
         deadline_datetime = deadline
     else:
-        raise ValueError("Deadline must be a string in 'YYYY-MM-DD' format, a datetime object, or None.")
+        raise ValueError(
+            "Deadline must be a string in 'YYYY-MM-DD [HH:MM[:SS]]' format, a datetime object, or None."
+        )
 
-    # Check if deadline is after current time
     current_time = datetime.now()
     if deadline_datetime <= current_time:
         raise ValueError("Deadline must be a future date and time, not in the past or present.")
