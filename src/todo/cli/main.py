@@ -28,7 +28,7 @@ def main():
     parser_add_task.add_argument("--project-name", required=True, help="Name of the project")
     parser_add_task.add_argument("--task-name", required=True, help="Name of the task")
     parser_add_task.add_argument("--description", help="Description of the task")
-    parser_add_task.add_argument("--deadline", help="Deadline of the task in YYYY-MM-DD format (optional)")
+    parser_add_task.add_argument("--deadline", help="Deadline of the task in 'YYYY-MM-DD', 'YYYY-MM-DD HH:MM', or 'YYYY-MM-DD HH:MM:SS' format (optional)")
 
     # Update task command
     parser_update_task = subparsers.add_parser("update-task", help="Update an existing task")
@@ -132,7 +132,7 @@ def main():
                     if tasks:
                         print(f"Tasks in project '{args.project_name}':")
                         for task in tasks:
-                            print(f"- {task.title}: {task.description} (Status: {task.status}) (id: {task.id})")
+                            print(f"- {task.title}: {task.description} (Status: {task.status}) (id: {task.id}) (deadline: {task.deadline})")
                     else:
                         print(f"No tasks found in project '{args.project_name}'.")
                 except ValueError as e:
