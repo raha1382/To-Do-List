@@ -14,7 +14,7 @@ class Project(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False)
     description = Column(String, nullable=True)
-    tasks = relationship("Task", back_populates="projects", cascade="all, delete-orphan")
+    tasks = relationship("Task", back_populates="project", cascade="all, delete-orphan")
     created_time = Column(DateTime, default=datetime.now)
 
     def __post_init__(self):
