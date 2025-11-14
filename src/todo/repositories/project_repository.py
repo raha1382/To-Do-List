@@ -23,8 +23,8 @@ class ProjectRepository:
     def get_all(self) -> List[Project]:
         return self.db.query(Project).all()
 
-    def update(self, project_id: int, name: Optional[str] = None, description: Optional[str] = None) -> Optional[Project]:
-        project = self.get_by_id(project_id)
+    def update(self, name: Optional[str] = None, description: Optional[str] = None) -> Optional[Project]:
+        project = self.get_by_name(name)
         if not project:
             return None
         if name is not None:
@@ -35,8 +35,8 @@ class ProjectRepository:
         self.db.refresh(project)
         return project
 
-    def delete(self, project_id: int) -> bool:
-        project = self.get_by_id(project_id)
+    def delete(self, name: Optional[str] = None) -> bool:
+        project = self.get_by_name(name)
         if not project:
             return False
         self.db.delete(project)
