@@ -10,6 +10,7 @@ This repository uses a structured branching model to separate experimental work,
 | Branch | Description |
 |---------|--------------|
 | **`develop`** | 🌱 **Experimental Development Branch** — Used for testing and adding new features. Code here may be unstable. |
+| **`develop-db-version`** | 🌱 **Experimental Development Branch using database** — This version has database instead of saving in memory. |
 | **`refactor/correct-version`** | 🔧 **Refactored & Corrected Version** — Contains the latest fixes, improvements, and architectural refinements. |
 | **`main`** | 🧩 **Stable Release Branch** — Production-ready and runnable version of the CLI. Merges from `refactor/correct-version` after validation. |
 
