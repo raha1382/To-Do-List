@@ -2,13 +2,22 @@ import argparse
 from todo.core.project_service import ProjectService
 from todo.core.task_service import TaskService
 from todo.storage.in_memory_storage import InMemoryStorage
+from ..repositories.project_repository import ProjectRepository
+from ..repositories.task_repository import TaskRepository
 
-# Global storage for persistence within session
-storage = InMemoryStorage()
-project_service = ProjectService(storage)
-task_service = TaskService(storage)
+# # Global storage for persistence within session
+# storage = InMemoryStorage()
+# project_service = ProjectService(storage)
+# task_service = TaskService(storage)
 
 def main():
+    project_repo = ProjectRepository()
+    task_repo = TaskRepository()
+
+    project_service = ProjectService(project_repo, task_repo)
+    task_service = TaskService(project_repo, task_repo)
+
+
     parser = argparse.ArgumentParser(description="ToDo List CLI Application")
     subparsers = parser.add_subparsers(dest="command")
 
@@ -81,7 +90,11 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "update-project":
                 try:
-                    success = project_service.update_project(args.name, args.new_name or args.name, args.new_description or "")
+                    success = project_service.update_project(
+                        args.name,
+                        args.new_name or args.name,
+                        args.new_description or ""
+                    )
                     if success:
                         print(f"Project '{args.name}' updated successfully.")
                     else:

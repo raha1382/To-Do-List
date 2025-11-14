@@ -9,7 +9,7 @@ from enum import Enum as PyEnum
 
 class TaskStatus(PyEnum):
     TODO = "todo"
-    IN_PROGRESS = "in_progress"
+    DOING = "doing"
     DONE = "done"
 
 @dataclass
@@ -32,6 +32,7 @@ class Task(Base):
     def __post_init__(self):
         self.title = validate_name_of_task(self.title)
         validate_description_of_task(self.description)
-        self.status = validate_status_of_task(self.status)
+        status_value = validate_status_of_task(self.status).strip() 
+        self.status = TaskStatus(status_value)
         if self.deadline is not None:
             validate_deadline(self.deadline)

@@ -1,4 +1,4 @@
-from ..model.task import Task
+from ..model.task import Task, TaskStatus
 from ..storage.in_memory_storage import InMemoryStorage
 from ..utils.utils import MAX_NUMBER_OF_TASKS, TASK_STATUS
 from ..utils.validators import validate_name_of_task, validate_description_of_task, validate_status_of_task, validate_deadline
@@ -21,7 +21,8 @@ class TaskService:
             raise ValueError(f"Task with name '{name}' already exists")
 
         # Validate status
-        status = validate_status_of_task(status)
+        status = validate_status_of_task(status).strip()
+        status_enum = TaskStatus(status) 
 
         # Validate and convert deadline
         deadline_datetime = validate_deadline(deadline)
@@ -39,7 +40,7 @@ class TaskService:
             title=name,
             project_name=project_name,
             description=description,
-            status=status,
+            status=status_enum,
             deadline=deadline_datetime
         )
 
@@ -68,14 +69,15 @@ class TaskService:
         # Validate inputs
         new_name = validate_name_of_task(new_name)
         validate_description_of_task(description)
-        status = validate_status_of_task(status)
+        status = validate_status_of_task(status).strip()
+        status_enum = TaskStatus(status) 
         deadline_datetime = validate_deadline(deadline)
 
         return self.task_repo.update(
             task_id=task.id,
             title=new_name,
             description=description,
-            status=status,
+            status=status_enum,
             deadline=deadline_datetime
         )
     
@@ -98,5 +100,6 @@ class TaskService:
             return False
 
         # Validate and update status
-        validated_status = validate_status_of_task(new_status)
-        return self.task_repo.update(task_id=task.id, status=validated_status)
+        validated_status = validate_status_of_task(new_status).strip()
+        status_enum = TaskStatus(validated_status) 
+        return self.task_repo.update(task_id=task.id, status=status_enum)

@@ -1,14 +1,14 @@
 # src/todo/repositories/task.py
 from typing import List, Optional
 from datetime import datetime
-from src.todo.model.task import Task, TaskStatus
-from src.todo.db.session import SessionLocal
+from todo.model.task import Task, TaskStatus
+from todo.db.session import get_db
 
 
 class TaskRepository:
 
     def __init__(self):
-        self.db = next(SessionLocal())  
+        self.db = next(get_db())
 
     def create(
         self,

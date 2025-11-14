@@ -1,10 +1,10 @@
 from typing import List, Optional
-from src.todo.model.project import Project
-from src.todo.db.session import sessionlocal
+from todo.model.project import Project
+from todo.db.session import get_db
 
 class ProjectRepository:
     def __init__(self):
-        self.db = next(sessionlocal())
+        self.db = next(get_db())
 
     def create(self, name: str, description: Optional[str] = None) -> Project:
         # project_id = max((project_item.id for project_item in self.storage._projects.values()), default=-1) + 1
