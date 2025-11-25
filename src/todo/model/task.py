@@ -25,7 +25,6 @@ class Task(Base):
     )
     deadline = Column(DateTime, nullable=True, default=datetime.now)
     project_name = Column(String, ForeignKey("projects.name", ondelete="CASCADE", onupdate="CASCADE"))
-    # project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"))
     project = relationship("Project", back_populates="tasks")
 
     def __post_init__(self):

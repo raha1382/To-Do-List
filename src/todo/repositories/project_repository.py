@@ -8,8 +8,6 @@ class ProjectRepository:
         self.db = next(get_db())
 
     def create(self, name: str, description: Optional[str] = None) -> Project:
-        # project_id = max((project_item.id for project_item in self.storage._projects.values()), default=-1) + 1
-        name = name.strip()
         if description is not None:
             description = description.strip()
         project = Project(name=name, description=description)
@@ -22,14 +20,12 @@ class ProjectRepository:
         return self.db.query(Project).filter(Project.id == project_id).first()
 
     def get_by_name(self, name: str) -> Optional[Project]:
-        name = name.strip()
         return self.db.query(Project).filter(Project.name == name).first()
 
     def get_all(self) -> List[Project]:
         return self.db.query(Project).all()
 
     def update(self, name: Optional[str] = None, new_name: Optional[str] = None, description: Optional[str] = None) -> Optional[Project]:
-        name = name.strip()
         if new_name is not None:
             new_name = new_name.strip()
         if description is not None:
@@ -49,7 +45,6 @@ class ProjectRepository:
         return project
 
     def delete(self, name: Optional[str] = None) -> bool:
-        name = name.strip()
         project = self.get_by_name(name)
         if not project:
             return False

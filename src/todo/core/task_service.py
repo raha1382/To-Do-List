@@ -35,8 +35,6 @@ class TaskService:
             if not project:
                 raise ValueError(f"Project '{project_name}' not found.")
 
-        # Create task with auto-incremented ID
-        # task_id = max((task.id for task in self.task_repo.get_all()), default=-1) + 1
         task = self.task_repo.create(
             title=name,
             project_name=project_name,
@@ -44,13 +42,6 @@ class TaskService:
             status=status_enum,
             deadline=deadline_datetime
         )
-
-        # # Add task to project if project_name is provided
-        # if project:
-        #     project.tasks.append(task)
-
-        # # Add task to storage
-        # self.storage._tasks[task_id] = task
         return task
     
     def get_task(self, name: str) -> Task | None:
