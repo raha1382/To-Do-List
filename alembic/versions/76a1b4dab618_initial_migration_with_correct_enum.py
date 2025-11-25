@@ -1,8 +1,8 @@
-"""init
+"""Initial migration with correct enum
 
-Revision ID: a4ea9f658b92
+Revision ID: 76a1b4dab618
 Revises: 
-Create Date: 2025-11-14 19:31:48.132515
+Create Date: 2025-11-25 17:14:21.777550
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'a4ea9f658b92'
+revision: str = '76a1b4dab618'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -34,7 +34,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('description', sa.String(), nullable=True),
-    sa.Column('status', sa.Enum('TODO', 'IN_PROGRESS', 'DONE', name='task_status'), nullable=False),
+    sa.Column('status', sa.Enum('todo', 'doing', 'done', name='task_status'), server_default='todo', nullable=False),
     sa.Column('deadline', sa.DateTime(), nullable=True),
     sa.Column('project_name', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['project_name'], ['projects.name'], ondelete='CASCADE'),

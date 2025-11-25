@@ -1,4 +1,5 @@
-from ..model.task import Task, TaskStatus
+from ..model.task import Task
+from ..model.enums import TaskStatus
 from ..storage.in_memory_storage import InMemoryStorage
 from ..utils.utils import MAX_NUMBER_OF_TASKS, TASK_STATUS
 from ..utils.validators import validate_name_of_task, validate_description_of_task, validate_status_of_task, validate_deadline
@@ -10,7 +11,7 @@ class TaskService:
         self.project_repo = project_repo
         self.task_repo = task_repo
 
-    def create_task(self, name: str, description: str = "", status: str = TASK_STATUS[0], deadline: str | None = None, project_name: str = None) -> Task:
+    def create_task(self, name: str, description: str = "", status: str = TaskStatus.TODO.value, deadline: str | None = None, project_name: str = None) -> Task:
         # Check max number of tasks
         all_tasks = self.task_repo.get_all()
         if len(all_tasks) >= MAX_NUMBER_OF_TASKS:
@@ -21,7 +22,7 @@ class TaskService:
             raise ValueError(f"Task with name '{name}' already exists")
 
         # Validate status
-        status = validate_status_of_task(status).strip()
+        status = validate_status_of_task(status)
         status_enum = TaskStatus(status) 
 
         # Validate and convert deadline
@@ -69,7 +70,7 @@ class TaskService:
         # Validate inputs
         new_name = validate_name_of_task(new_name)
         validate_description_of_task(description)
-        status = validate_status_of_task(status).strip()
+        status = validate_status_of_task(status)
         status_enum = TaskStatus(status) 
         deadline_datetime = validate_deadline(deadline)
 
@@ -100,6 +101,6 @@ class TaskService:
             return False
 
         # Validate and update status
-        validated_status = validate_status_of_task(new_status).strip()
+        validated_status = validate_status_of_task(new_status)
         status_enum = TaskStatus(validated_status) 
         return self.task_repo.update(task_id=task.id, status=status_enum)

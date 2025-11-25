@@ -114,7 +114,7 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "update-task":
                 try:
-                    success = task_service.update_task(args.project_name, args.task_name, args.new_name or args.task_name, args.new_description or "", args.status or task.status, args.deadline)
+                    success = task_service.update_task(args.project_name, args.task_name, args.new_name or args.task_name, args.new_description or "", args.status or task.status.value, args.deadline)
                     if success:
                         print(f"Task '{args.task_name}' updated successfully in project '{args.project_name}'.")
                     else:
@@ -145,7 +145,7 @@ def main():
                     if tasks:
                         print(f"Tasks in project '{args.project_name}':")
                         for task in tasks:
-                            print(f"- {task.title}: {task.description} (Status: {task.status}) (id: {task.id}) (deadline: {task.deadline})")
+                            print(f"- {task.title}: {task.description} (Status: {task.status.value}) (id: {task.id}) (deadline: {task.deadline})")
                     else:
                         print(f"No tasks found in project '{args.project_name}'.")
                 except ValueError as e:

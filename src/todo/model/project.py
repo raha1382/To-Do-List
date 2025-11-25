@@ -7,7 +7,7 @@ from ..db.base import Base
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 
-@dataclass
+
 class Project(Base):
     __tablename__ = "projects"
 

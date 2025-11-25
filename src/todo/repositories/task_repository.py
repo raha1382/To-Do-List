@@ -1,7 +1,8 @@
 # src/todo/repositories/task.py
 from typing import List, Optional
 from datetime import datetime
-from todo.model.task import Task, TaskStatus
+from todo.model.task import Task
+from todo.model.enums import TaskStatus
 from todo.db.session import get_db
 
 
@@ -53,6 +54,8 @@ class TaskRepository:
         status: Optional[TaskStatus] = None,
         deadline: Optional[datetime] = None
     ) -> Optional[Task]:
+        print("DEBUG STATUS TYPE:", status, type(status))
+
         task = self.get_by_id(task_id)
         if not task:
             return None
@@ -65,6 +68,7 @@ class TaskRepository:
             task.status = status
         if deadline is not None:
             task.deadline = deadline
+        print("DEBUG STATUS TYPE:", status, type(status))
 
         self.db.commit()
         self.db.refresh(task)

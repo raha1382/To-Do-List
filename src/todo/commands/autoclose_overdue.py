@@ -3,7 +3,7 @@ from sqlalchemy import and_
 from todo.db.session import SessionLocal
 from todo.model.project import Project
 from todo.model.task import Task
-from todo.model.task import TaskStatus
+from todo.model.enums import TaskStatus
 
 def autoclose_overdue_tasks():
     db = SessionLocal()

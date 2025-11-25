@@ -6,6 +6,7 @@ from ..utils.utils import (
     TASK_STATUS
 )
 from datetime import datetime
+from ..model.enums import TaskStatus
 
 def validate_name_of_project(name: str) -> str:
     if len(name.split()) > MAX_PROJECT_NAME_WORDS:
@@ -28,10 +29,11 @@ def validate_description_of_task(description: str) -> str:
     return description
 
 def validate_status_of_task(status: str) -> str:
-    lower_case_status = status.lower()
-    if lower_case_status not in TASK_STATUS:
-        raise ValueError(f"Invalid status: must be one of {', '.join(TASK_STATUS)}.")
-    return lower_case_status
+    status = status.lower().strip()
+    if status not in {s.value for s in TaskStatus}:
+        raise ValueError(f"Invalid status: must be one of {', '.join(s.value for s in TaskStatus)}.")
+    return status  
+
 
 def validate_deadline(deadline: datetime | str | None) -> datetime | None:
     """Validate the deadline format and ensure it is after the current time (date + time)."""
