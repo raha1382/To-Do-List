@@ -10,7 +10,8 @@ class ProjectRepository:
     def create(self, name: str, description: Optional[str] = None) -> Project:
         # project_id = max((project_item.id for project_item in self.storage._projects.values()), default=-1) + 1
         name = name.strip()
-        description = description.strip()
+        if description is not None:
+            description = description.strip()
         project = Project(name=name, description=description)
         self.db.add(project)
         self.db.commit()
@@ -29,8 +30,11 @@ class ProjectRepository:
 
     def update(self, name: Optional[str] = None, new_name: Optional[str] = None, description: Optional[str] = None) -> Optional[Project]:
         name = name.strip()
-        new_name = new_name.strip()
-        description = description.strip()
+        if new_name is not None:
+            new_name = new_name.strip()
+        if description is not None:
+            description = description.strip()
+
         project = self.get_by_name(name)
         if not project:
             return None

@@ -19,6 +19,14 @@ class TaskRepository:
         status: TaskStatus = TaskStatus.TODO,
         deadline: Optional[datetime] = None
     ) -> Task:
+        
+        title = title.strip()
+        project_name = project_name.strip()
+        if description is not None:
+            description = description.strip()
+        
+
+
         task = Task(
             title=title,
             project_name=project_name,
@@ -35,9 +43,12 @@ class TaskRepository:
         return self.db.query(Task).filter(Task.id == task_id).first()
 
     def get_by_project_name(self, project_name: str) -> List[Task]:
+        project_name = project_name.strip()
         return self.db.query(Task).filter(Task.project_name == project_name).all()
 
     def get_by_project_name_and_title(self, project_name: str, title: str) -> Optional[Task]:
+        project_name = project_name.strip()
+        title = title.strip()
         return self.db.query(Task).filter(
             Task.project_name == project_name,
             Task.title == title
@@ -54,7 +65,13 @@ class TaskRepository:
         status: Optional[TaskStatus] = None,
         deadline: Optional[datetime] = None
     ) -> Optional[Task]:
-        print("DEBUG STATUS TYPE:", status, type(status))
+        
+
+        if title is not None:
+            title = title.strip()
+        if description is not None:
+            description = description.strip()
+
 
         task = self.get_by_id(task_id)
         if not task:
@@ -68,7 +85,6 @@ class TaskRepository:
             task.status = status
         if deadline is not None:
             task.deadline = deadline
-        print("DEBUG STATUS TYPE:", status, type(status))
 
         self.db.commit()
         self.db.refresh(task)

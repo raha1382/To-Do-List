@@ -95,7 +95,6 @@ class TaskService:
         return self.task_repo.get_by_project_name(project_name)
     
     def change_task_status(self, project_name: str, task_name: str, new_status: str) -> bool:
-
         task = self.task_repo.get_by_project_name_and_title(project_name, task_name)
         if not task:
             return False
