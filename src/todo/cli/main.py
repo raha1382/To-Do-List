@@ -84,12 +84,17 @@ def main():
 
             if args.command == "create-project":
                 try:
+                    args.name = args.name.strip()
+                    args.description = args.description.strip()
                     project = project_service.create_project(args.name, args.description or "")
                     print(f"Project '{project.name}' created successfully.")
                 except ValueError as e:
                     print(f"Error: {e}")
             elif args.command == "update-project":
                 try:
+                    args.name = args.name.strip()
+                    args.new_name = args.new_name.strip()
+                    args.new_description = args.new_description.strip()
                     success = project_service.update_project(
                         args.name,
                         args.new_name or args.name,
@@ -103,6 +108,9 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "add-task":
                 try:
+                    args.task_name = args.task_name.strip()
+                    args.description = args.description.strip()
+                    args.project_name = args.project_name.strip()
                     task = task_service.create_task(
                         name=args.task_name,
                         description=args.description or "",
@@ -114,6 +122,12 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "update-task":
                 try:
+                    args.project_name = args.project_name.strip()
+                    args.task_name = args.task_name.strip()
+                    args.new_name = args.new_name.strip()
+                    args.task_name = args.task_name.strip()
+                    args.new_description = args.new_description.strip()
+                    args.status = args.status.strip()
                     success = task_service.update_task(args.project_name, args.task_name, args.new_name or args.task_name, args.new_description or "", args.status or task.status.value, args.deadline)
                     if success:
                         print(f"Task '{args.task_name}' updated successfully in project '{args.project_name}'.")
@@ -123,6 +137,9 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "change-task-status":
                 try:
+                    args.project_name = args.project_name.strip()
+                    args.task_name = args.task_name.strip()
+                    args.status = args.status.strip()
                     success = task_service.change_task_status(args.project_name, args.task_name, args.status)
                     if success:
                         print(f"Status of task '{args.task_name}' in project '{args.project_name}' changed to '{args.status}'.")
@@ -132,6 +149,7 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "delete-task":
                 try:
+                    args.project_name = args.project_name.strip()
                     success = task_service.delete_task(args.project_name, args.task_id)
                     if success:
                         print(f"Task with ID '{args.task_id}' deleted successfully from project '{args.project_name}'.")
@@ -141,6 +159,7 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "list-tasks":
                 try:
+                    args.project_name = args.project_name.strip()
                     tasks = task_service.list_tasks(args.project_name)
                     if tasks:
                         print(f"Tasks in project '{args.project_name}':")
@@ -159,6 +178,7 @@ def main():
                     print("No projects found.")
             elif args.command == "delete-project":
                 try:
+                    args.name = args.name.strip()
                     success = project_service.delete_project(args.name)
                     if success:
                         print(f"Project '{args.name}' and its tasks deleted successfully.")

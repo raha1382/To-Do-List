@@ -1,5 +1,6 @@
 from typing import List, Optional
 from todo.model.project import Project
+from todo.model.project import Task
 from todo.db.session import get_db
 
 class ProjectRepository:
@@ -8,6 +9,8 @@ class ProjectRepository:
 
     def create(self, name: str, description: Optional[str] = None) -> Project:
         # project_id = max((project_item.id for project_item in self.storage._projects.values()), default=-1) + 1
+        name = name.strip()
+        description = description.strip()
         project = Project(name=name, description=description)
         self.db.add(project)
         self.db.commit()
@@ -18,17 +21,23 @@ class ProjectRepository:
         return self.db.query(Project).filter(Project.id == project_id).first()
 
     def get_by_name(self, name: str) -> Optional[Project]:
+        name = name.strip()
         return self.db.query(Project).filter(Project.name == name).first()
 
     def get_all(self) -> List[Project]:
         return self.db.query(Project).all()
 
-    def update(self, name: Optional[str] = None, description: Optional[str] = None) -> Optional[Project]:
+    def update(self, name: Optional[str] = None, new_name: Optional[str] = None, description: Optional[str] = None) -> Optional[Project]:
+        name = name.strip()
+        new_name = new_name.strip()
+        description = description.strip()
         project = self.get_by_name(name)
         if not project:
             return None
-        if name is not None:
-            project.name = name
+        if new_name is not None:
+            exists = self.db.query(Project).filter(Project.name == new_name).first()
+            if not exists:
+                project.name = new_name
         if description is not None:
             project.description = description
         self.db.commit()
@@ -36,6 +45,7 @@ class ProjectRepository:
         return project
 
     def delete(self, name: Optional[str] = None) -> bool:
+        name = name.strip()
         project = self.get_by_name(name)
         if not project:
             return False
