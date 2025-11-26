@@ -5,6 +5,7 @@ from ..utils.utils import MAX_NUMBER_OF_TASKS, TASK_STATUS
 from ..utils.validators import validate_name_of_task, validate_description_of_task, validate_status_of_task, validate_deadline
 from ..repositories.project_repository import ProjectRepository
 from ..repositories.task_repository import TaskRepository
+from datetime import datetime
 
 class TaskService:
     def __init__(self, project_repo: ProjectRepository, task_repo: TaskRepository):
@@ -57,6 +58,8 @@ class TaskService:
         task = self.task_repo.get_by_project_name_and_title(project_name, task_name)
         if not task:
             return False
+        if task.deadline < datetime.now():
+            raise ValueError(f"This task cann't be updated because the deadline has been passed.")
 
         # Validate inputs
         new_name = validate_name_of_task(new_name)
@@ -89,6 +92,8 @@ class TaskService:
         task = self.task_repo.get_by_project_name_and_title(project_name, task_name)
         if not task:
             return False
+        if task.deadline < datetime.now():
+            raise ValueError(f"This task cann't be updated because the deadline has been passed.")
 
         # Validate and update status
         validated_status = validate_status_of_task(new_status)

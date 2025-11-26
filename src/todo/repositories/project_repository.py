@@ -4,8 +4,8 @@ from todo.model.project import Task
 from todo.db.session import get_db
 
 class ProjectRepository:
-    def __init__(self):
-        self.db = next(get_db())
+    def __init__(self,db):
+        self.db = db
 
     def create(self, name: str, description: Optional[str] = None) -> Project:
         if description is not None:

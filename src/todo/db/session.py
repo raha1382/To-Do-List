@@ -11,7 +11,8 @@ if not DATABASE_URL:
     raise ValueError("DATABASE_URL not set in .env")
 
 engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, expire_on_commit=False, bind=engine)
+
 
 
 def get_db():

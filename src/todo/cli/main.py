@@ -5,15 +5,17 @@ from todo.storage.in_memory_storage import InMemoryStorage
 from ..repositories.project_repository import ProjectRepository
 from ..repositories.task_repository import TaskRepository
 from datetime import datetime
+from todo.commands.scheduler import start_scheduler
+import threading
+from todo.db.session import get_db
+
 
 # # Global storage for persistence within session
 # storage = InMemoryStorage()
 # project_service = ProjectService(storage)
 # task_service = TaskService(storage)
 
-def main():
-    project_repo = ProjectRepository()
-    task_repo = TaskRepository()
+def main(project_repo: ProjectRepository, task_repo: TaskRepository):
 
     project_service = ProjectService(project_repo, task_repo)
     task_service = TaskService(project_repo, task_repo)
@@ -230,4 +232,15 @@ def main():
             print(f"Error: {e}")
 
 if __name__ == "__main__":
-    main()
+    db = next(get_db())
+    task_repo = TaskRepository(db)
+    project_repo = ProjectRepository(db)
+
+    scheduler_thread = threading.Thread(
+        target=lambda: start_scheduler(task_repo),
+        daemon=True
+    )
+    scheduler_thread.start()
+
+    main(project_repo, task_repo)
+    

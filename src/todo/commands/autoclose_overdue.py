@@ -4,8 +4,10 @@ from todo.db.session import SessionLocal
 from todo.model.project import Project
 from todo.model.task import Task
 from todo.model.enums import TaskStatus
+from ..repositories.task_repository import TaskRepository
 
-def autoclose_overdue_tasks():
+
+def autoclose_overdue_tasks(task_repo: TaskRepository):
     db = SessionLocal()
     try:
         now = datetime.now()
@@ -19,15 +21,17 @@ def autoclose_overdue_tasks():
         for task in overdue_tasks:
             task.status = TaskStatus.DONE
             task.closed_at = now
-            print(f"Task '{task.title}' (ID: {task.id}) closed automatically.")
+            task_repo.update(task_id=task.id, status=task.status)
+            print(f"\n >Task '{task.title}' (ID: {task.id}) closed automatically.")
 
         db.commit()
-        print(f"Autoclose completed: {len(overdue_tasks)} tasks closed.")
+        print(f"\n >Autoclose completed: {len(overdue_tasks)} tasks closed.")
     except Exception as e:
         db.rollback()
-        print(f"Error in autoclose: {e}")
+        print(f"\n >Error in autoclose: {e}")
     finally:
         db.close()
 
-if __name__ == "__main__":
-    autoclose_overdue_tasks()
+# if __name__ == "__main__":
+#     repo = TaskRepository()
+#     autoclose_overdue_tasks(repo)
