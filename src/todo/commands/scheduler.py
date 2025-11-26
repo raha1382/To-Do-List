@@ -7,7 +7,7 @@ def start_scheduler(task_repo: TaskRepository):
     scheduler.add_job(
         func=lambda: autoclose_overdue_tasks(task_repo),
         trigger="interval",
-        minutes=15,
+        minutes=2,
         id='autoclose_overdue',
         replace_existing=True
     )

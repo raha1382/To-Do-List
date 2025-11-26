@@ -20,7 +20,6 @@ def autoclose_overdue_tasks(task_repo: TaskRepository):
 
         for task in overdue_tasks:
             task.status = TaskStatus.DONE
-            task.closed_at = now
             task_repo.update(task_id=task.id, status=task.status)
             print(f"\n >Task '{task.title}' (ID: {task.id}) closed automatically.")
 

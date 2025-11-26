@@ -201,7 +201,8 @@ def main(project_repo: ProjectRepository, task_repo: TaskRepository):
                     if tasks:
                         print(f"Tasks in project '{args.project_name}':")
                         for task in tasks:
-                            print(f"- {task.title}: {task.description} (Status: {task.status.value}) (id: {task.id}) (deadline: {task.deadline})")
+                            closed = task.closed_at.strftime("%Y-%m-%d %H:%M:%S") if task.closed_at else "task has not been done yet."
+                            print(f"- (name: {task.title}) : (description: {task.description}) (Status: {task.status.value}) (id: {task.id}) (deadline: {task.deadline}) (closed at: {closed})")
                     else:
                         print(f"No tasks found in project '{args.project_name}'.")
                 except ValueError as e:
@@ -210,7 +211,7 @@ def main(project_repo: ProjectRepository, task_repo: TaskRepository):
                 projects = project_service.list_projects()
                 if projects:
                     for project in projects:
-                        print(f"Project: {project.id} - {project.name} - {project.description}")
+                        print(f"(name: {project.name}) - (id: {project.id}) - (description: {project.description})")
                 else:
                     print("No projects found.")
             elif args.command == "delete-project":

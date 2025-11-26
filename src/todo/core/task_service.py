@@ -58,8 +58,7 @@ class TaskService:
         task = self.task_repo.get_by_project_name_and_title(project_name, task_name)
         if not task:
             return False
-        if task.deadline < datetime.now():
-            raise ValueError(f"This task cann't be updated because the deadline has been passed.")
+        
 
         # Validate inputs
         new_name = validate_name_of_task(new_name)
@@ -92,10 +91,10 @@ class TaskService:
         task = self.task_repo.get_by_project_name_and_title(project_name, task_name)
         if not task:
             return False
-        if task.deadline < datetime.now():
-            raise ValueError(f"This task cann't be updated because the deadline has been passed.")
+        
 
         # Validate and update status
         validated_status = validate_status_of_task(new_status)
         status_enum = TaskStatus(validated_status) 
         return self.task_repo.update(task_id=task.id, status=status_enum)
+    

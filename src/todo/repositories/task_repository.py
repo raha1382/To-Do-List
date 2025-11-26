@@ -66,6 +66,11 @@ class TaskRepository:
             task.description = description
         if status is not None:
             task.status = status
+            if status == TaskStatus.DONE:
+                if task.closed_at == None:
+                    task.closed_at = datetime.now() 
+            else:
+                task.closed_at = None
         if deadline is not None:
             task.deadline = deadline
 
@@ -80,15 +85,3 @@ class TaskRepository:
         self.db.delete(task)
         self.db.commit()
         return True
-
-    def get_overdue_todo_tasks(self) -> List[Task]:
-        now = datetime.now()
-        return (
-            self.db.query(Task)
-            .filter(
-                Task.status == TaskStatus.TODO,
-                Task.deadline.isnot(None),
-                Task.deadline < now
-            )
-            .all()
-        )
