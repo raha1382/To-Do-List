@@ -4,7 +4,7 @@ from todo.core.task_service import TaskService
 from ..repositories.project_repository import ProjectRepository
 from ..repositories.task_repository import TaskRepository
 from datetime import datetime
-from todo.commands.scheduler import start_scheduler
+from todo.app.commands.scheduler import start_scheduler
 import threading
 from todo.db.session import get_db
 
