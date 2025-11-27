@@ -1,14 +1,21 @@
 import argparse
 from todo.core.project_service import ProjectService
 from todo.core.task_service import TaskService
-from todo.storage.in_memory_storage import InMemoryStorage
+from ..repositories.project_repository import ProjectRepository
+from ..repositories.task_repository import TaskRepository
+from datetime import datetime
+from todo.commands.scheduler import start_scheduler
+import threading
+from todo.db.session import get_db
 
-# Global storage for persistence within session
-storage = InMemoryStorage()
-project_service = ProjectService(storage)
-task_service = TaskService(storage)
 
-def main():
+
+def main(project_repo: ProjectRepository, task_repo: TaskRepository):
+
+    project_service = ProjectService(project_repo, task_repo)
+    task_service = TaskService(project_repo, task_repo)
+
+
     parser = argparse.ArgumentParser(description="ToDo List CLI Application")
     subparsers = parser.add_subparsers(dest="command")
 
@@ -75,13 +82,22 @@ def main():
 
             if args.command == "create-project":
                 try:
+                    args.name = args.name.strip() if args.name else None
+                    args.description = args.description.strip() if args.description else None
                     project = project_service.create_project(args.name, args.description or "")
                     print(f"Project '{project.name}' created successfully.")
                 except ValueError as e:
                     print(f"Error: {e}")
             elif args.command == "update-project":
                 try:
-                    success = project_service.update_project(args.name, args.new_name or args.name, args.new_description or "")
+                    args.name = args.name.strip() if args.name else None
+                    args.new_name = args.new_name.strip() if args.new_name else None
+                    args.new_description = args.new_description.strip() if args.new_description else None
+                    success = project_service.update_project(
+                        args.name,
+                        args.new_name or args.name,
+                        args.new_description or ""
+                    )
                     if success:
                         print(f"Project '{args.name}' updated successfully.")
                     else:
@@ -90,6 +106,21 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "add-task":
                 try:
+                    args.task_name = args.task_name.strip() if args.task_name else None
+                    args.description = args.description.strip() if args.description else None
+                    args.project_name = args.project_name.strip() if args.project_name else None
+                    if args.deadline:
+                        d = args.deadline.strip()
+                        try:
+                            args.deadline = datetime.strptime(d, "%Y-%m-%d %H:%M:%S")
+                        except ValueError:
+                            try:
+                                args.deadline = datetime.strptime(d, "%Y-%m-%d %H:%M")
+                            except ValueError:
+                                try:
+                                    args.deadline = datetime.strptime(d, "%Y-%m-%d")
+                                except ValueError:
+                                    raise ValueError("Invalid deadline format")
                     task = task_service.create_task(
                         name=args.task_name,
                         description=args.description or "",
@@ -101,15 +132,46 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "update-task":
                 try:
-                    success = task_service.update_task(args.project_name, args.task_name, args.new_name or args.task_name, args.new_description or "", args.status or task.status, args.deadline)
-                    if success:
-                        print(f"Task '{args.task_name}' updated successfully in project '{args.project_name}'.")
-                    else:
+                    args.project_name = args.project_name.strip() if args.project_name else None
+                    args.task_name = args.task_name.strip() if args.task_name else None
+                    args.new_name = args.new_name.strip() if args.new_name else None
+                    args.new_description = args.new_description.strip() if args.new_description else None
+                    args.status = args.status.strip() if args.status else None
+                    if args.deadline:
+                        d = args.deadline.strip()
+                        try:
+                            args.deadline = datetime.strptime(d, "%Y-%m-%d %H:%M:%S")
+                        except ValueError:
+                            try:
+                                args.deadline = datetime.strptime(d, "%Y-%m-%d %H:%M")
+                            except ValueError:
+                                try:
+                                    args.deadline = datetime.strptime(d, "%Y-%m-%d")
+                                except ValueError:
+                                    raise ValueError("Invalid deadline format")
+                    task = task_service.get_task(args.task_name)
+                    if task is None:
                         print(f"Error: Task '{args.task_name}' not found in project '{args.project_name}'.")
+                    else:
+                        success = task_service.update_task(
+                            project_name=args.project_name,
+                            task_name=args.task_name,
+                            new_name=args.new_name or args.task_name,
+                            description=args.new_description or task.description,
+                            status=args.status or task.status.value,
+                            deadline=args.deadline
+                        )
+                        if success:
+                            print(f"Task '{args.task_name}' updated successfully in project '{args.project_name}'.")
+                        else:
+                            print(f"Error: Task '{args.task_name}' not found in project '{args.project_name}'.")
                 except ValueError as e:
                     print(f"Error: {e}")
             elif args.command == "change-task-status":
                 try:
+                    args.project_name = args.project_name.strip() if args.project_name else None
+                    args.task_name = args.task_name.strip() if args.task_name else None
+                    args.status = args.status.strip() if args.status else None
                     success = task_service.change_task_status(args.project_name, args.task_name, args.status)
                     if success:
                         print(f"Status of task '{args.task_name}' in project '{args.project_name}' changed to '{args.status}'.")
@@ -119,6 +181,7 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "delete-task":
                 try:
+                    args.project_name = args.project_name.strip() if args.project_name else None
                     success = task_service.delete_task(args.project_name, args.task_id)
                     if success:
                         print(f"Task with ID '{args.task_id}' deleted successfully from project '{args.project_name}'.")
@@ -128,11 +191,13 @@ def main():
                     print(f"Error: {e}")
             elif args.command == "list-tasks":
                 try:
+                    args.project_name = args.project_name.strip() if args.project_name else None
                     tasks = task_service.list_tasks(args.project_name)
                     if tasks:
                         print(f"Tasks in project '{args.project_name}':")
                         for task in tasks:
-                            print(f"- {task.title}: {task.description} (Status: {task.status}) (id: {task.id}) (deadline: {task.deadline})")
+                            closed = task.closed_at.strftime("%Y-%m-%d %H:%M:%S") if task.closed_at else "task has not been done yet."
+                            print(f"- (name: {task.title}) : (description: {task.description}) (Status: {task.status.value}) (id: {task.id}) (deadline: {task.deadline}) (closed at: {closed})")
                     else:
                         print(f"No tasks found in project '{args.project_name}'.")
                 except ValueError as e:
@@ -141,11 +206,12 @@ def main():
                 projects = project_service.list_projects()
                 if projects:
                     for project in projects:
-                        print(f"Project: {project.id} - {project.name} - {project.description}")
+                        print(f"(name: {project.name}) - (id: {project.id}) - (description: {project.description})")
                 else:
                     print("No projects found.")
             elif args.command == "delete-project":
                 try:
+                    args.name = args.name.strip() if args.name else None
                     success = project_service.delete_project(args.name)
                     if success:
                         print(f"Project '{args.name}' and its tasks deleted successfully.")
@@ -162,4 +228,15 @@ def main():
             print(f"Error: {e}")
 
 if __name__ == "__main__":
-    main()
+    db = next(get_db())
+    task_repo = TaskRepository(db)
+    project_repo = ProjectRepository(db)
+
+    scheduler_thread = threading.Thread(
+        target=lambda: start_scheduler(task_repo),
+        daemon=True
+    )
+    scheduler_thread.start()
+
+    main(project_repo, task_repo)
+    
