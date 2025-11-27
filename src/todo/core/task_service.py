@@ -1,6 +1,5 @@
 from ..model.task import Task
 from ..model.enums import TaskStatus
-from ..storage.in_memory_storage import InMemoryStorage
 from ..utils.utils import MAX_NUMBER_OF_TASKS, TASK_STATUS
 from ..utils.validators import validate_name_of_task, validate_description_of_task, validate_status_of_task, validate_deadline
 from ..repositories.project_repository import ProjectRepository

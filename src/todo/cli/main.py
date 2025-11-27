@@ -1,7 +1,6 @@
 import argparse
 from todo.core.project_service import ProjectService
 from todo.core.task_service import TaskService
-from todo.storage.in_memory_storage import InMemoryStorage
 from ..repositories.project_repository import ProjectRepository
 from ..repositories.task_repository import TaskRepository
 from datetime import datetime
@@ -10,10 +9,6 @@ import threading
 from todo.db.session import get_db
 
 
-# # Global storage for persistence within session
-# storage = InMemoryStorage()
-# project_service = ProjectService(storage)
-# task_service = TaskService(storage)
 
 def main(project_repo: ProjectRepository, task_repo: TaskRepository):
 

@@ -1,4 +1,3 @@
-from ..storage.in_memory_storage import InMemoryStorage
 from ..utils.utils import MAX_NUMBER_OF_PROJECTS
 from ..model.project import Project
 from ..core.task_service import TaskService
