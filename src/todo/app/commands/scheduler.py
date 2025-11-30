@@ -1,5 +1,3 @@
-# todo/app/background/scheduler.py
-
 from apscheduler.schedulers.background import BackgroundScheduler
 from todo.repositories.task_repository import TaskRepository
 from todo.app.commands.autoclose_overdue import autoclose_overdue_tasks 

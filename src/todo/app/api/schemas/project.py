@@ -3,11 +3,15 @@ from typing import Optional
 from datetime import datetime
 
 class ProjectCreate(BaseModel):
-    name: str = Field(..., min_length=1, max_length=100, description="Project name")
+    name: str = Field(..., min_length=1, description="Project name")
     description: Optional[str] = Field(None, description="Project description")
 
+class ProjectUpdatePut(BaseModel):
+    name: str = Field(..., min_length=1)
+    description: str = Field(..., min_length=1)
+
 class ProjectUpdate(BaseModel):
-    name: Optional[str] = Field(None, min_length=1, max_length=100)
+    name: str | None = Field(default=None, min_length=1)
     description: Optional[str] = None
 
 class ProjectResponse(BaseModel):
