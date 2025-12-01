@@ -3,9 +3,10 @@ from datetime import datetime
 from sqlalchemy import and_
 from todo.model.task import Task
 from todo.model.enums import TaskStatus
+from todo.repositories.task_repository import TaskRepository
 
 
-def autoclose_overdue_tasks(task_repo):
+def autoclose_overdue_tasks(task_repo: TaskRepository):
     try:
         now = datetime.now()
         overdue_tasks = (
@@ -21,18 +22,10 @@ def autoclose_overdue_tasks(task_repo):
 
         closed_count = 0
         for task in overdue_tasks:
-            was_changed = False
-            if task.status != TaskStatus.DONE:
-                task.status = TaskStatus.DONE
-                was_changed = True
-            if task.closed_at is None:
-                task.closed_at = now
-                was_changed = True
-
-            if was_changed:
-                task_repo.update(task_id=task.id, status=TaskStatus.DONE, closed_at=now)
-                print(f"Auto-closed overdue task: '{task.title}' (ID: {task.id})")
-                closed_count += 1
+            print(f"Auto-closed overdue task: '{task.title}' (ID: {task.id})")
+            closed_count += 1
+            task.status = TaskStatus.DONE
+            task_repo.update(task_id=task.id, status=TaskStatus.DONE)
 
         if closed_count > 0:
             task_repo.db.commit()
