@@ -1,4 +1,3 @@
-# todo/app/background/autoclose.py
 from datetime import datetime
 from sqlalchemy import and_
 from todo.model.task import Task
@@ -14,7 +13,7 @@ def autoclose_overdue_tasks(task_repo: TaskRepository):
             .filter(
                 and_(
                     Task.deadline < now,
-                    Task.status != TaskStatus.DONE
+                    Task.status != TaskStatus.DONE.value
                 )
             )
             .all()
@@ -28,7 +27,6 @@ def autoclose_overdue_tasks(task_repo: TaskRepository):
             task_repo.update(task_id=task.id, status=TaskStatus.DONE)
 
         if closed_count > 0:
-            task_repo.db.commit()
             print(f"Autoclose job completed: {closed_count} task(s) closed.")
         else:
             print("Autoclose job ran – no overdue tasks found.")
