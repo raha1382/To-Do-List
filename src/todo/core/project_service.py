@@ -21,6 +21,9 @@ class ProjectService:
     
     def get_project(self, name: str) -> Project | None:
         return self.project_repo.get_by_name(name)
+    
+    def get_project_id(self, id: int) -> Project | None:
+        return self.project_repo.get_by_id(id)
 
     def update_project(self, name: str, new_name: str, new_description: str) -> bool:
         # Check if the original project exists

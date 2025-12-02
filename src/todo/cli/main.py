@@ -4,11 +4,30 @@ from todo.core.task_service import TaskService
 from ..repositories.project_repository import ProjectRepository
 from ..repositories.task_repository import TaskRepository
 from datetime import datetime
-from todo.commands.scheduler import start_scheduler
+from todo.app.commands.scheduler import start_scheduler
 import threading
 from todo.db.session import get_db
 
+import warnings
 
+warnings.warn(
+    "CLI is deprecated. Use the Web API at http://localhost:8000/docs instead.",
+    DeprecationWarning,
+    stacklevel=2
+)
+
+print("""
+╔══════════════════════════════════════════════════════════════════╗
+║                         CLI IS DEPRECATED                        ║
+║                                                                  ║
+║  This CLI has been deprecated .                                  ║
+║  Please use the new Web API:                                     ║
+║                                                                  ║
+║       http://localhost:8000/docs   (Swagger UI)                  ║
+║       http://localhost:8000/redoc  (ReDoc)                       ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+""")
 
 def main(project_repo: ProjectRepository, task_repo: TaskRepository):
 

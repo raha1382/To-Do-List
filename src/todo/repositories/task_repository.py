@@ -1,4 +1,3 @@
-# src/todo/repositories/task.py
 from typing import List, Optional
 from datetime import datetime
 from todo.model.task import Task
