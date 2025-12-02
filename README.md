@@ -1,4 +1,4 @@
-# 📝 ToDo CLI Project
+# 📝 ToDoList Project
 
 A simple and extensible **To-Do List Manager using API and database** built with Python and Poetry.  
 
