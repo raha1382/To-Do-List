@@ -69,7 +69,7 @@ Tasks
 
 POST /tasks/ → create task
 
-GET /tasks?project_name= → list tasks in a project
+GET /tasks/?project_name= → list tasks in a project
 
 GET /tasks/{task_id} → get single task
 
